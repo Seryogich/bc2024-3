@@ -7,8 +7,16 @@ program
   .option('-d, --display', 'display result in console');
 
 program.parse(process.argv);
+
 const options = program.opts();
 
+// Перевірка на наявність обовʼязкового параметра
+if (!options.input) {
+  console.error("Please, specify input file");
+  process.exit(1);
+}
+
+// Перевірка на наявність вхідного файлу
 if (!fs.existsSync(options.input)) {
   console.error("Cannot find input file");
   process.exit(1);
@@ -17,18 +25,18 @@ if (!fs.existsSync(options.input)) {
 const data = fs.readFileSync(options.input, 'utf8');
 const jsonData = JSON.parse(data);
 
-// Фільтруємо дані за значенням ключа parent
 const newData = jsonData
   .filter(item => item.parent === "BS3_BanksLiab")
-  .map(item => `${item.txten}: ${item.value}`) // Змінено на використання зворотних лапок
+  .map(item => `${item.txten}: ${item.value}`);
 
-// Формуємо результат
-const result = newData.join('\n'); // Об'єднуємо результати в рядок
+const result = newData.join('\n');
 
+// Виводимо результат у консоль, якщо задано -d
 if (options.display) {
   console.log(result);
 }
 
+// Записуємо результат у файл, якщо задано -o
 if (options.output) {
   fs.writeFileSync(options.output, result, 'utf8');
   console.log(`Data has been written to ${options.output}`);
