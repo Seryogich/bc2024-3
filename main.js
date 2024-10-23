@@ -10,13 +10,12 @@ program.parse(process.argv);
 
 const options = program.opts();
 
-// Перевірка на наявність обовʼязкового параметра
+
 if (!options.input) {
   console.error("Please, specify input file");
   process.exit(1);
 }
 
-// Перевірка на наявність вхідного файлу
 if (!fs.existsSync(options.input)) {
   console.error("Cannot find input file");
   process.exit(1);
@@ -31,12 +30,6 @@ const newData = jsonData
 
 const result = newData.join('\n');
 
-// Виводимо результат у консоль, якщо задано -d
-if (options.display) {
-  console.log(result);
-}
-
-// Записуємо результат у файл, якщо задано -o
 if (options.output) {
   fs.writeFileSync(options.output, result, 'utf8');
   console.log(`Data has been written to ${options.output}`);
